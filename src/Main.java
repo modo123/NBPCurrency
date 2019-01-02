@@ -4,6 +4,6 @@ public class Main
     {
         //System.out.println("Podaj kod waluty, datę początkową i końcową. ");
         HttpClient hc = new HttpClient();
-        hc.establishConnection();
+        hc.getExchangeRates();
     }
 }
