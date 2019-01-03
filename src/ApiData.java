@@ -1,6 +1,7 @@
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import javax.naming.ldap.ManageReferralControl;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 
@@ -22,15 +23,34 @@ public class ApiData
 //      System.out.println(buyingRate);
 
         int count = rates.length();
-        double sum = 0;
+        double bidSum = 0;
         for (int i = 0; i < count; i++)
         {
-            sum += rates.getJSONObject(i).getDouble("bid");
+            bidSum += rates.getJSONObject(i).getDouble("bid");
         }
 
-        double averageBid = sum/count; //sredni kurs kupna waluty currencyCode z okresu startDate - endDate
+        double averageBid = bidSum/count; //sredni kurs kupna waluty currencyCode z okresu startDate - endDate
         DecimalFormat decimalFormat = new DecimalFormat("#.####");
         System.out.println(decimalFormat.format(averageBid));
+
+        double askSum = 0;
+        for (int i = 0; i < count; i++)
+        {
+            askSum += rates.getJSONObject(i).getDouble("ask");
+        }
+
+        double averageAsk = askSum/count; //sredni kurs sprzedazy waluty currencyCode z okresu startDate - endDate
+
+        double variance = 0;
+        for (int i = 0; i < count; i++)
+        {
+            variance += Math.pow((rates.getJSONObject(i).getDouble("ask") - averageAsk), 2);
+        }
+
+        variance = variance/count; //wariancja
+        double standardDeviation = Math.sqrt(variance); //odchylenie standardowe = pierwiastek z wariancji
+
+        System.out.println(decimalFormat.format(standardDeviation));
     }
 
 }
